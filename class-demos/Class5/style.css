@@ -1,0 +1,23 @@
+/* Q: What is p when defining a rule in CSS? */
+/* A: p is the selector. this is what is going to have the styles applied 
+*/
+p {
+  /* Q: What is the property that manipulates the horizontal size of the block? Write that property and give it a value of 60%*/
+  width: 60%;
+  /* a block is an element. vertical alignment has a display of block */
+
+  /* Q: What are the other units of measurement we use in CSS? */
+  /* A: px, pt, pc, em, %, rem*/
+}
+
+/* To be completed as a class together: */
+/* Select "blue" class */
+.blue{
+  background-color: blue;
+}
+
+/* Select "main" id */
+/* you can only use an id name one tiem */
+#main{
+  border: 2px solid red;
+}
