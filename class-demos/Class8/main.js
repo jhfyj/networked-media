@@ -59,7 +59,7 @@ window.onload = () => {
 				//doesnt have to be s. can be anything
 
 				// ` this symbol is in top left
-				s.style.transform = `rotate(${rotation}deg)`;
+				allspans = s.style.transform = `rotate(${rotation}deg)`;
 				rotation++;
 				// special type of quotation that allows you to inject variables into strings
 				// the dollar sign lets u put variable's value inside a string and only works inside of ``
