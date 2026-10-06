@@ -1,14 +1,18 @@
 <html>
 	<head>
 		<!-- fill in with the correct title -->
-		<meta charset="utf-8" />
-		<!-- apparently i need to define the text encoding system -->
-		<title>Class 9</title>
+		<title></title>
 		<!-- links to other files -->
 		<link href="style.css" rel="stylesheet" />
 		<script src="main.js"></script>
 	</head>
 	<body>
-		<div id="ascii"></div>
+		<div class="parent">
+			<p>this is the parent</p>
+			<div class="child">
+				<p>This is the Child</p>
+			</div>
+			<!-- z-index does not work for nested children -->
+		</div>
 	</body>
 </html>
