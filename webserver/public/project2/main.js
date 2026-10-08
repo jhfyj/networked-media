@@ -1,5 +1,10 @@
 // window.onLoad is short for this
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
+	//need to add async because we need to wait for response from the API key
+	let header = document.getElementById('weather');
+	let weatherText = document.getElementById('weatherNote');
+	// changing the header based on the weather
+
 	let background = `
 +++++++******************************+++++++++
 +++++++++++++++***************###****+++++++++
@@ -39,9 +44,29 @@ window.addEventListener('load', () => {
 	asciiBG.textContent = background;
 	console.log(rows[1]);
 
-	let weather = Math.floor(Math.random() * 3);
+	let weather;
+
+	let apiKey = 'ff492f74659394620718ce27a41fcec4';
+	let url = `https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=${apiKey}`;
+
+	let response = await fetch(url);
+	let data = await response.json();
+	console.log("here's the data");
+	console.log(data);
+
+	let condition = data.weather[0].main;
+	console.log(condition);
+
+	if (condition == 'Rain' || condition == 'Drizzle' || condition == 'Thunderstorm') {
+		weather = 2;
+	} else if (condition == 'Snow') {
+		weather = 3;
+	} else {
+		weather = 1;
+	}
 
 	if (weather == 1) {
+		weatherText.textContent = 'The current weather is sunny';
 		let background = `
 +++++++******************************+++++++++
 +++++++++++++++***************###****+++++++++
@@ -75,10 +100,12 @@ window.addEventListener('load', () => {
 `;
 
 		let rows = background.split('\n');
+
 		// --> this lets you split by arrays of lines
 		//https://www.w3schools.com/jsref/jsref_split.asp
 
 		let asciiBG = document.getElementById('ascii');
+		header.textContent = 'Sunny';
 		asciiBG.textContent = background;
 
 		setInterval(() => {
@@ -101,7 +128,7 @@ window.addEventListener('load', () => {
 				// you can split rows[i] because it is a string
 
 				grid.push(rowArrays);
-				console.log(grid);
+				// console.log(grid);
 			}
 
 			grid[4][35] = '☀️';
@@ -115,6 +142,8 @@ window.addEventListener('load', () => {
 			asciiBG.textContent = text.join('\n');
 		}, 200);
 	} else if (weather == 2) {
+		header.textContent = 'Rainy';
+		weatherText.textContent = 'The current weather is rainy';
 		//rainy weather
 		// need to move raindrop down vertically
 		//original position of raindrop
@@ -127,14 +156,12 @@ window.addEventListener('load', () => {
 		let grid = [];
 
 		for (let i = 0; i < rows.length; i++) {
-			//making the image smaller to account for larger emoji
-
 			let rowArrays = rows[i].split(``);
 
 			// you can split rows[i] because it is a string
 
 			grid.push(rowArrays);
-			console.log(grid);
+			// console.log(grid);
 			//pushing is pushing all of the split individual characters into an array
 		}
 		// column first, then row
@@ -226,6 +253,58 @@ window.addEventListener('load', () => {
 			}
 
 			asciiBG.textContent = text.join('\n');
+		}, 200);
+	} else if ((weather = 3)) {
+		header.textContent = 'Snowy';
+		weatherText.textContent = 'The current weather is snowy';
+
+		//lets move each of the lines down to create snow falling effect
+		let background = `
++++++🌨️************🌨️🌨️**********🌨️*++++++++
++++++++++++++++***************###****+++++++++
+****************************####❄️###++++*****
++++++++**********************####***++++++++++
+++++++++++***************************==+++++++
+++++❄️++++++++*********+++++**********===+++++
++++++++++++++++++++++++++++*++*****=❄️====++++
+===========+++++++++++++++++++++++++******++++
+==================❄️========+++++++++++*****++
+---=================++++++++++++++++++========
+-----============++++++++++++++++++++=========
+------==============++++++++++++++++++======--
+---=---=❄️==========+++++++++++++++++++====---
+----------==--=================++++++++++-----
+-------------------=========❄️======++++------
+--:---------------=========================---
+---:----------------------==================--
+--=++==+⛄-------------:---------=======+==***
++++++++***+=----:::::::::-:----==+==++==*###%%
+%%%######***#*+--------⛄--*###%%%%%%%%%%%%%%%
+@@@@@@@@@@@@@@@@@%%%%%%%@%%%%@@@%@@%%#@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%%###%%%%#%@%%%
+*+++++++++++++++********+++++++**++**+********
+%####*#*#****+**++**#%%#*+**+++##**#####*##%##
+*##**#%#****+***##***##**#%*++**#%***####**##%
+%%#######**####%@@@@@%####*#%#***#%#+*##%@@@%#
+********%%%%@@@@@@%##########*###%%***#**###*#
+%@@@%@@@@@@@@@%%%#%%@##%#**#%%@%@@##%#**#%@#*%
+@@@@@@@@@@@@@%%%%%%%@@%##%%@@@@%######*#%%##%%
+`;
+
+		let rows = background.split('\n').slice(1);
+		//starts at row[2]. the slice skips row 1
+
+		asciiBG.textContent = background;
+
+		setInterval(() => {
+			//syntax for splicing --> array.splice(start, deleteCount, item1, item2, ...)
+			let lastLine = rows.splice(16, 1)[0];
+			//the line that was spliced
+
+			rows.splice(1, 0, lastLine);
+			//you remember the last line and then put it put into the top, replacing 0, which has nothing
+
+			asciiBG.textContent = rows.join('\n');
 		}, 200);
 	}
 });

@@ -1,25 +1,33 @@
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-#ascii{
-    width: hug-content;
-    height: hug-content;
-    /* lowkey figma hug content */
-    /* background-color: yellow; */
-    white-space:pre;
-    color: rgb(0, 0, 0);
-    font-family: monospace;
+#ascii {
+	width: hug-content;
+	height: hug-content;
+	/* lowkey figma hug content */
+	/* background-color: yellow; */
+	white-space: pre;
+	color: rgb(0, 0, 0);
+	font-family: monospace;
 
-    /* monospace gives it even spacing */
+	/* monospace gives it even spacing */
 }
 
+.emoji {
+	font-size: 0.8em;
+}
 
-.emoji{
-    font-size: 0.8em;
+#weather {
+	color: black;
+}
+
+#weatherNote {
+	color: black;
 }
