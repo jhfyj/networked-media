@@ -1,0 +1,10 @@
+nav {
+	background-color: magenta;
+}
+
+/* multi-select two elements with the same rule */
+/* :visited  */
+a,
+a:visited {
+	color: white;
+}

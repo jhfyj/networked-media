@@ -1,0 +1,20 @@
+{# {% include partial-nav.njk %} #}
+    <nav>
+		{# in order to go to a specific .njk file, we use the route specified #}
+		<a href="/">Home</a>
+		<a href="/form">Form</a>
+		<a href="/view-all">View all Post</a>
+    </nav>
+{# in order ot access the server data, we need to use the variable we passed in the server.js for the render of view-all.njk#}
+{# the message we just declared --> messagesArrayFromServer #}
+
+{% for sendMessage in messagesArrayFromServer %}
+    <p>
+        <span>user: </span>
+        <span>{{singleMessage.user}}</span>
+    </p>
+    <p>
+        <span>message: </span>
+        <span>{{singleMessage.message}}</span>
+    </p>
+{% endfor %}

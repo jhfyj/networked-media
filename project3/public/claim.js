@@ -1,4 +1,4 @@
-// claim.js --> the claim page (views/claim.edge)
+// claim.js --> the claim page (views/claim.njk)
 // step 1 = pick a blob, step 2 = draw your face + fill out the form
 
 // these change while you're drawing
@@ -10,12 +10,12 @@ window.addEventListener('load', async () => {
 	let step2 = document.getElementById('step2');
 
 	// ask the server which spots are taken already
-	let response = await fetch('/designers');
+	let response = await fetch('/project3/designers');
 	let data = await response.json();
 	console.log(data);
 
 	// STEP 1 --> picking a blob
-	// all 20 blobs are already in claim.edge
+	// all 20 blobs are already in claim.njk
 	let blobs = document.querySelectorAll('.pick-blob');
 	for (let i = 0; i < blobs.length; i++) {
 		blobs[i].addEventListener('click', () => {
@@ -33,7 +33,7 @@ window.addEventListener('load', async () => {
 	// turn the taken blobs gray
 	for (let i = 0; i < data.designers.length; i++) {
 		let taken = document.getElementById('pick' + data.designers[i].spot);
-		taken.src = 'assets/blob-gray.svg';
+		taken.src = '/project3/assets/blob-gray.svg';
 		taken.classList.add('taken');
 	}
 
