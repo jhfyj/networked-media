@@ -1,0 +1,330 @@
+/* project 3 styles */
+/* colors + sizes are kinda from my figma file */
+
+body {
+	margin: 0;
+	font-family: 'Outfit', sans-serif;
+	font-weight: 300;
+	color: black;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+p {
+	margin: 0;
+}
+
+a {
+	color: black;
+}
+
+.gray {
+	color: gray;
+}
+
+.red {
+	color: red;
+}
+
+/* ---------- HEADER ---------- */
+
+#header {
+	width: 90%;
+	max-width: 620px;
+	margin-top: 80px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#logo {
+	width: 320px;
+}
+
+#title {
+	font-family: 'Rock Salt', cursive;
+	font-weight: 400;
+	font-size: 40px;
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+#intro {
+	font-size: 18px;
+}
+
+#claim-text {
+	font-style: italic;
+	margin-top: 20px;
+}
+
+#created-by {
+	font-size: 13px;
+	color: gray;
+	margin-top: 10px;
+}
+
+/* ---------- QR ---------- */
+
+#qr-section {
+	margin-top: 60px;
+	text-align: center;
+}
+
+#qr {
+	width: 190px;
+	height: 190px;
+}
+
+#qr-section p {
+	margin-top: 10px;
+}
+
+/* ---------- DIRECTORY ---------- */
+
+#directory {
+	width: 90%;
+	max-width: 700px;
+	margin-top: 80px;
+	display: flex;
+	/* wrap makes it go to the next row after 5 */
+	flex-wrap: wrap;
+	justify-content: center;
+	row-gap: 50px;
+}
+
+.spot {
+	/* 20% = 5 in a row */
+	width: 20%;
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	/* each spot is a link now so get rid of the underline */
+	text-decoration: none;
+}
+
+/* the blob + the drawing sit on top of each other */
+/* position relative on the parent so absolute on the kids stays inside it */
+.face {
+	position: relative;
+	width: 100px;
+	height: 120px;
+}
+
+/* blob and drawing are the exact same size and spot so the drawing lines up */
+/* (it's half the size of the canvas on the claim page, 200x240 --> 100x120) */
+.blob,
+.drawing {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100px;
+	height: 120px;
+}
+
+/* hidden until someone claims the spot (main.js shows it) */
+.drawing {
+	display: none;
+}
+
+.name {
+	/* the name is in a typewriter font in figma */
+	font-family: 'Courier New', monospace;
+	font-size: 18px;
+	margin-top: 14px;
+}
+
+.role {
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+.website {
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+/* ---------- FOOTER ---------- */
+
+#footer {
+	width: 90%;
+	max-width: 900px;
+	margin-top: 120px;
+}
+
+#together {
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+.line {
+	/* flex 1 = stretch to fill the space */
+	flex: 1;
+	height: 1px;
+	background-color: lightgray;
+}
+
+#footer-info {
+	margin-top: 60px;
+	display: flex;
+	justify-content: center;
+	font-size: 14px;
+}
+
+#footer-scribble {
+	width: 100%;
+	/* fill width */
+	margin-top: 40px;
+}
+
+/* //////////////////////////////////////////////////////////// */
+/* ---------- CLAIM PAGE (phone) ---------- */
+
+.phone {
+	align-items: stretch;
+	max-width: 380px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.top-bar {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+.back {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.back img {
+	width: 20px;
+}
+
+#picker {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	row-gap: 20px;
+}
+
+.pick-blob {
+	/* 5 in a row */
+	width: 18%;
+	cursor: pointer;
+}
+
+/* taken blobs can't be clicked */
+.taken {
+	pointer-events: none;
+}
+
+/* step 2 is hidden at first */
+#step2 {
+	display: none;
+	padding-bottom: 40px;
+}
+
+/* the box you draw in. 200 x 240 same as the canvas */
+#canvas-box {
+	position: relative;
+	width: 200px;
+	height: 240px;
+	margin: 14px auto 0 auto;
+}
+
+#canvas-blob,
+#draw-canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 200px;
+	height: 240px;
+}
+
+#draw-canvas {
+	/* stops the page from scrolling when you draw with your finger */
+	touch-action: none;
+	cursor: crosshair;
+}
+
+#tools {
+	display: flex;
+	justify-content: center;
+	gap: 4px;
+	margin-top: 10px;
+}
+
+.tool {
+	border: none;
+	background: none;
+	padding: 6px;
+	cursor: pointer;
+}
+
+.tool img {
+	width: 20px;
+}
+
+/* shows which tool you're using */
+.tool.selected {
+	background-color: #eeeeee;
+}
+
+label {
+	display: block;
+	font-size: 14px;
+	margin-top: 16px;
+	margin-bottom: 6px;
+}
+
+.small {
+	font-size: 11px;
+	margin-bottom: 8px;
+}
+
+input[type='text'],
+select {
+	width: 100%;
+	padding: 8px;
+	font-family: 'Outfit', sans-serif;
+	/* without this the padding makes it wider than 100% */
+	box-sizing: border-box;
+}
+
+.contact {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.contact img {
+	width: 20px;
+}
+
+.black-button {
+	display: block;
+	width: 100%;
+	margin-top: 30px;
+	padding: 12px;
+	background-color: black;
+	color: white;
+	border: none;
+	font-family: 'Outfit', sans-serif;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	box-sizing: border-box;
+}
