@@ -1,3 +1,4 @@
 node_modules/
 .DS_Store
-.envproject3/public/drawings/*.png
+.env
+project3/public/drawings/*.png
