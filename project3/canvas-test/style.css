@@ -1,0 +1,23 @@
+body {
+	font-family: Arial;
+	margin: 20px;
+}
+
+/* border so i can see where the canvas is */
+canvas {
+	border: 1px solid black;
+	/* without this my phone scrolls the page instead of drawing */
+	touch-action: none;
+}
+
+/* tried making it bigger here first but the lines showed up in the wrong spot + blurry */
+/* the width + height have to go on the canvas tag instead */
+/* canvas { width: 400px; height: 480px; } */
+
+/* orange box so i can see if the png background is see through */
+#preview-box {
+	background-color: orange;
+	width: 200px;
+	height: 240px;
+	margin-top: 10px;
+}

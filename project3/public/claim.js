@@ -46,18 +46,19 @@ window.addEventListener('load', async () => {
 	// STEP 2 --> drawing on a canvas
 	// the canvas sits right on top of the blob picture
 	let canvas = document.getElementById('draw-canvas');
-	// ctx is what you actually draw with
-	let ctx = canvas.getContext('2d');
-	ctx.lineWidth = 4;
-	ctx.lineCap = 'round';
-	ctx.strokeStyle = 'black';
+	// paint brush
+
+	let brush = canvas.getContext('2d');
+	brush.lineWidth = 4;
+	brush.strokeStyle = 'black';
 
 	// pointer events work for the mouse AND fingers on a phone
 	// offsetX / offsetY = where the mouse is inside the canvas
 	canvas.addEventListener('pointerdown', (e) => {
+		//if pressed then tru
 		isDrawing = true;
-		ctx.beginPath();
-		ctx.moveTo(e.offsetX, e.offsetY);
+		brush.beginPath();
+		brush.moveTo(e.offsetX, e.offsetY);
 	});
 
 	canvas.addEventListener('pointermove', (e) => {
@@ -66,15 +67,15 @@ window.addEventListener('load', async () => {
 		}
 		if (tool == 'pen') {
 			// normal drawing
-			ctx.globalCompositeOperation = 'source-over';
-			ctx.lineWidth = 4;
+			brush.globalCompositeOperation = 'source-over';
+			brush.lineWidth = 4;
 		} else {
 			// eraser --> destination-out makes whatever you go over see through again
-			ctx.globalCompositeOperation = 'destination-out';
-			ctx.lineWidth = 20;
+			brush.globalCompositeOperation = 'destination-out';
+			brush.lineWidth = 20;
 		}
-		ctx.lineTo(e.offsetX, e.offsetY);
-		ctx.stroke();
+		brush.lineTo(e.offsetX, e.offsetY);
+		brush.stroke();
 	});
 
 	// stop drawing when you let go anywhere on the page
