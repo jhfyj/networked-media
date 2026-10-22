@@ -1,19 +1,26 @@
 // importing express to use it as our server
 const express = require('express');
-// fs comes with node (no npm install). it lets the server save files
-const fs = require('fs');
+// importing edge, the templating library. it turns the .edge files in my views folder into pages
+// (npm install edge.js)
+const { Edge } = require('edge.js');
 
 // initialize our application using express
 const app = express();
 
 // "middleware"
-// serves everything in the public folder (html, css, front end js, images)
+// serves everything in the public folder (css, front end js, images)
 app.use(express.static('public'));
 // lets us read request.body from the form (POST)
 
 // limit is bigger than normal because the drawing png comes in as a really long string
 // realized this after trying it out
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+
+// edge settings. tells edge that all my .edge files are in the views folder
+const edge = Edge.create();
+// just 'views' didnt work (it kept looking for views/views/views/index.edge??)
+// edge wants the full path. process.cwd() is the folder i ran node server.js from (project3)
+edge.mount(process.cwd() + '/views');
 
 // how many blobs are on the page. only 20 for now --> 4 rows of 5
 let totalSpots = 20;
@@ -26,7 +33,28 @@ let designers = [];
 
 // ROUTES
 
-// the front end fetches this to draw the directory (same idea as fetching the weather api in project 2)
+// PAGES
+// edge.render needs the name of the .edge file (no .edge at the end)
+// it takes a sec to make the page so we have to await it --> async
+app.get('/', async (request, response) => {
+	let page = await edge.render('index');
+	response.send(page);
+});
+
+// the claim page. this is where the qr code goes
+app.get('/claim', async (request, response) => {
+	let page = await edge.render('claim');
+	response.send(page);
+});
+
+// my canvas test from before i built the claim page
+app.get('/canvas-test', async (request, response) => {
+	let page = await edge.render('canvas-test');
+	response.send(page);
+});
+
+// DATA
+// the front end fetches this to fill in the directory (same idea as fetching the weather api in project 2)
 app.get('/designers', (request, response) => {
 	console.log('someone asked for the designers');
 	// sending an object back turns it into json automatically
@@ -36,7 +64,7 @@ app.get('/designers', (request, response) => {
 	});
 });
 
-// the form on claim.html sends everything here
+// the form on the claim page sends everything here
 app.post('/add-designer', (request, response) => {
 	// console.log in server.js only shows up in the terminal not the browser
 	console.log(request.body);
@@ -47,43 +75,28 @@ app.post('/add-designer', (request, response) => {
 
 	// make sure the spot is real
 	if (data.spot == '' || spot < 0 || spot >= totalSpots) {
-		response.send('that spot does not exist :( <a href="/claim.html">go back</a>');
+		response.send('that spot does not exist :( <a href="/claim">go back</a>');
 		return;
 	}
 
 	// make sure nobody took the spot while this person was drawing
 	for (let i = 0; i < designers.length; i++) {
 		if (designers[i].spot == spot) {
-			response.send(
-				'someone already claimed that spot :( <a href="/claim.html">pick another one</a>'
-			);
+			response.send('someone already claimed that spot :( <a href="/claim">pick another one</a>');
 			return;
 		}
 	}
 
-	// SAVING THE DRAWING AS A PNG
-	// the drawing comes in like "data:image/png;base64,iVBORw0KG...."
-	// the part after the comma is the actual picture, so cut off the start
-	let drawing = '';
-	if (data.drawing != undefined && data.drawing.startsWith('data:image/png;base64,')) {
-		let pictureData = data.drawing.replace('data:image/png;base64,', '');
-		// one file per spot --> public/drawings/spot-3.png
-		let fileName = 'drawings/spot-' + spot + '.png';
-		// base64 tells it how to turn the string back into a picture
-		fs.writeFileSync('public/' + fileName, pictureData, 'base64');
-		console.log('saved ' + fileName);
-		// save where the png is so the directory page can load it
-		drawing = fileName;
-	}
-
 	let newDesigner = {
-		// spot, name, role, website, picture, drawing
+		// spot, name, role, website, drawing
 		spot: spot,
 		firstName: data.firstName,
 		lastName: data.lastName,
 		role: data.role,
 		website: data.website,
-		drawing: drawing
+		// the drawing is the png as a long string (data:image/png;base64,....)
+		// i just keep the whole string. an img tag can show it as the src, so i dont need to save a file
+		drawing: data.drawing
 	};
 
 	// push adds it to the end of the array
@@ -96,6 +109,7 @@ app.post('/add-designer', (request, response) => {
 
 // LAST
 // PORT, callback function
+// to start: cd into project3 then node server.js (edge looks for the views folder from here)
 app.listen(8080, () => {
 	console.log('restarting the server');
 	console.log('http://127.0.0.1:8080/');

@@ -12,7 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.3.0",
-    "nunjucks": "^3.2.4"
+    "edge.js": "^6.5.1",
+    "express": "^5.3.0"
   }
 }

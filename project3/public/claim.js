@@ -1,4 +1,4 @@
-// claim.js --> the claim page (claim.html)
+// claim.js --> the claim page (views/claim.edge)
 // step 1 = pick a blob, step 2 = draw your face + fill out the form
 
 // these change while you're drawing
@@ -15,7 +15,7 @@ window.addEventListener('load', async () => {
 	console.log(data);
 
 	// STEP 1 --> picking a blob
-	// all 20 blobs are already in claim.html
+	// all 20 blobs are already in claim.edge
 	let blobs = document.querySelectorAll('.pick-blob');
 	for (let i = 0; i < blobs.length; i++) {
 		blobs[i].addEventListener('click', () => {
