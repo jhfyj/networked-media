@@ -1,22 +1,20 @@
-// claim.js --> the claim page (views/claim.njk)
-// step 1 = pick a blob, step 2 = draw your face + fill out the form
+// form.js --> the form page (views/form.njk)
+// pick a blob at the top, then draw your face + fill out the form under it (all on one page)
 
 // these change while you're drawing
 let isDrawing = false;
-let tool = 'pen';
+let isErasing = false;
 
 window.addEventListener('load', async () => {
-	let step1 = document.getElementById('step1');
-	let step2 = document.getElementById('step2');
-
 	// ask the server which spots are taken already
 	let response = await fetch('/project3/designers');
 	let data = await response.json();
 	console.log(data);
 
-	// STEP 1 --> picking a blob
-	// all 20 blobs are already in claim.njk
-	let blobs = document.querySelectorAll('.pick-blob');
+	// PICKING A BLOB
+	// all 20 blobs come from partial-spots.njk (the same ones as the home page)
+	// #picker .blob = only the blob pictures inside the picker
+	let blobs = document.querySelectorAll('#picker .blob');
 	for (let i = 0; i < blobs.length; i++) {
 		blobs[i].addEventListener('click', () => {
 			console.log('picked spot ' + i);
@@ -24,87 +22,85 @@ window.addEventListener('load', async () => {
 			document.getElementById('spot-input').value = i;
 			// show the same blob behind the canvas
 			document.getElementById('canvas-blob').src = blobs[i].src;
-			// switch to step 2
-			step1.style.display = 'none';
-			step2.style.display = 'block';
 		});
 	}
 
 	// turn the taken blobs gray
 	for (let i = 0; i < data.designers.length; i++) {
-		let taken = document.getElementById('pick' + data.designers[i].spot);
+		let taken = document.getElementById('blob' + data.designers[i].spot);
 		taken.src = '/project3/assets/blob-gray.svg';
 		taken.classList.add('taken');
 	}
 
-	// back button on step 2 goes back to the blobs
-	document.getElementById('back-button').addEventListener('click', () => {
-		step2.style.display = 'none';
-		step1.style.display = 'block';
+	// DRAWING ON A CANVAS
+	// the canvas sits right on top of the blob picture
+	// drawing code is from this tutorial: https://medium.com/@akhil-mottammal/day-1-build-a-simple-drawing-app-with-an-eraser-in-javascript-f17dfc43f4fa
+	// i changed mousedown/mousemove/mouseup to pointer events so it works with fingers on a phone too
+	let canvas = document.getElementById('draw-canvas');
+	let eraseBtn = document.getElementById('eraser');
+	let penBtn = document.getElementById('pen');
+	let ctx = canvas.getContext('2d');
+
+	// the tutorial changes the button text here (eraseBtn.textContent = ...)
+	// but that deletes my eraser icon, so i just move the gray box instead
+	eraseBtn.addEventListener('click', () => {
+		isErasing = !isErasing; // switch between eraser and pen
+		if (isErasing) {
+			eraseBtn.classList.add('selected');
+			penBtn.classList.remove('selected');
+		} else {
+			eraseBtn.classList.remove('selected');
+			penBtn.classList.add('selected');
+		}
 	});
 
-	// STEP 2 --> drawing on a canvas
-	// the canvas sits right on top of the blob picture
-	let canvas = document.getElementById('draw-canvas');
-	// paint brush
+	// pen button goes back to drawing
+	penBtn.addEventListener('click', () => {
+		isErasing = false;
+		penBtn.classList.add('selected');
+		eraseBtn.classList.remove('selected');
+	});
 
-	let brush = canvas.getContext('2d');
-	brush.lineWidth = 4;
-	brush.strokeStyle = 'black';
-
-	// pointer events work for the mouse AND fingers on a phone
-	// offsetX / offsetY = where the mouse is inside the canvas
 	canvas.addEventListener('pointerdown', (e) => {
-		//if pressed then tru
 		isDrawing = true;
-		brush.beginPath();
-		brush.moveTo(e.offsetX, e.offsetY);
+		ctx.beginPath();
+		ctx.moveTo(e.offsetX, e.offsetY);
 	});
 
 	canvas.addEventListener('pointermove', (e) => {
-		if (isDrawing == false) {
-			return;
+		if (isDrawing) {
+			if (isErasing) {
+				ctx.clearRect(e.offsetX, e.offsetY, 20, 20); // eraser size 20x20
+			} else {
+				ctx.lineTo(e.offsetX, e.offsetY);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = 4;
+				ctx.stroke();
+			}
 		}
-		if (tool == 'pen') {
-			// normal drawing
-			brush.globalCompositeOperation = 'source-over';
-			brush.lineWidth = 4;
-		} else {
-			// eraser --> destination-out makes whatever you go over see through again
-			brush.globalCompositeOperation = 'destination-out';
-			brush.lineWidth = 20;
-		}
-		brush.lineTo(e.offsetX, e.offsetY);
-		brush.stroke();
 	});
 
-	// stop drawing when you let go anywhere on the page
+	// the tutorial has this on the canvas, but then if you let go outside the canvas it keeps drawing when you come back
+	// so i put it on the whole page
 	document.addEventListener('pointerup', () => {
 		isDrawing = false;
 	});
 
-	// pen + eraser
-	let pen = document.getElementById('pen');
-	let eraser = document.getElementById('eraser');
-
-	pen.addEventListener('click', () => {
-		tool = 'pen';
-		pen.classList.add('selected');
-		eraser.classList.remove('selected');
-	});
-
-	eraser.addEventListener('click', () => {
-		tool = 'eraser';
-		eraser.classList.add('selected');
-		pen.classList.remove('selected');
+	// clear button wipes the whole canvas
+	let btn = document.getElementById('clear');
+	btn.addEventListener('click', () => {
+		ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
 	});
 
 	// SUBMIT
 	// right before the form sends, put the drawing in the hidden input so it goes with everything else
+	// hidden input + toDataURL idea from this tutorial: https://www.askingbox.com/tutorial/send-html5-canvas-as-image-to-server
+	// what toDataURL gives back (mdn): https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
 	let form = document.getElementById('profile-form');
 	form.addEventListener('submit', () => {
 		// turns the drawing into a png. it comes out as a really long string (data:image/png;base64,....)
 		// the background is see through so only the lines get saved, not the blob
 		document.getElementById('drawing-input').value = canvas.toDataURL('image/png');
+		//only adding the drawing here. the rest are covered because they already use the form input. I just need to make sure this image gets sent
 	});
 });
