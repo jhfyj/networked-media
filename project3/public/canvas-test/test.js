@@ -1,5 +1,5 @@
 // testing the drawing canvas by itself first
-// if this works ill move it into claim.js
+// if this works ill move it into form.js
 
 let isDrawing = false;
 let tool = 'pen';

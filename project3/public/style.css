@@ -94,6 +94,8 @@ a {
 	flex-wrap: wrap;
 	justify-content: center;
 	row-gap: 50px;
+	/* the directory is a link now so get rid of the underline */
+	text-decoration: none;
 }
 
 .spot {
@@ -104,8 +106,6 @@ a {
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	/* each spot is a link now so get rid of the underline */
-	text-decoration: none;
 }
 
 /* the blob + the drawing sit on top of each other */
@@ -117,7 +117,7 @@ a {
 }
 
 /* blob and drawing are the exact same size and spot so the drawing lines up */
-/* (it's half the size of the canvas on the claim page, 200x240 --> 100x120) */
+/* (it's half the size of the canvas on the form page, 200x240 --> 100x120) */
 .blob,
 .drawing {
 	position: absolute;
@@ -184,7 +184,7 @@ a {
 }
 
 /* //////////////////////////////////////////////////////////// */
-/* ---------- CLAIM PAGE (phone) ---------- */
+/* ---------- FORM PAGE (phone) ---------- */
 
 .phone {
 	align-items: stretch;
@@ -218,9 +218,32 @@ a {
 	row-gap: 20px;
 }
 
-.pick-blob {
+/* the picker uses the same spots as the directory (partial-spots.njk) */
+/* but they need to be smaller to fit on a phone */
+/* giving specific item inside of class id */
+#picker .spot {
 	/* 5 in a row */
 	width: 18%;
+	min-height: 0;
+}
+
+#picker .face {
+	width: 100%;
+	height: auto;
+}
+
+/* no drawing on top here so the blob doesn't need to be absolute */
+#picker .blob {
+	position: static;
+	width: 100%;
+	height: auto;
+}
+
+/* the name, role + website are only for the home page */
+#picker .name,
+#picker .role,
+#picker .website {
+	display: none;
 }
 
 /* taken blobs can't be clicked */
@@ -228,9 +251,9 @@ a {
 	pointer-events: none;
 }
 
-/* step 2 is hidden at first */
-#step2 {
-	display: none;
+/* the form sits right under the blobs */
+#profile-form {
+	margin-top: 30px;
 	padding-bottom: 40px;
 }
 

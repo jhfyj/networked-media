@@ -31,7 +31,7 @@ let totalSpots = 20;
 // all of the designers get saved in here
 // NOTE: this is just an array so it resets every time i restart the server
 // i need to figure out how to actually save it somewhere later --> database???
-// starts empty. everyone gets added from the claim page
+// starts empty. everyone gets added from the form page
 let designers = [];
 
 // ROUTES
@@ -42,12 +42,12 @@ app.get('/project3', (request, response) => {
 	response.render('home.njk');
 });
 
-// the claim page. this is where the qr code goes
-app.get('/project3/claim', (request, response) => {
-	response.render('claim.njk');
+// the form page. this is where the qr code goes
+app.get('/project3/form', (request, response) => {
+	response.render('form.njk');
 });
 
-// my canvas test from before i built the claim page
+// my canvas test from before i built the form page
 app.get('/project3/canvas-test', (request, response) => {
 	response.render('canvas-test.njk');
 });
@@ -63,7 +63,7 @@ app.get('/project3/designers', (request, response) => {
 	});
 });
 
-// the form on the claim page sends everything here
+// the form on the form page sends everything here
 app.post('/project3/add-designer', (request, response) => {
 	// console.log in server.js only shows up in the terminal not the browser
 	console.log(request.body);
@@ -74,7 +74,7 @@ app.post('/project3/add-designer', (request, response) => {
 
 	// make sure the spot is real
 	if (data.spot == '' || spot < 0 || spot >= totalSpots) {
-		response.send('that spot does not exist :( <a href="/project3/claim">go back</a>');
+		response.send('that spot does not exist :( <a href="/project3/form">go back</a>');
 		return;
 	}
 
@@ -82,7 +82,7 @@ app.post('/project3/add-designer', (request, response) => {
 	for (let i = 0; i < designers.length; i++) {
 		if (designers[i].spot == spot) {
 			response.send(
-				'someone already claimed that spot :( <a href="/project3/claim">pick another one</a>'
+				'someone already claimed that spot :( <a href="/project3/form">pick another one</a>'
 			);
 			return;
 		}
