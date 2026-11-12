@@ -1,0 +1,16 @@
+form {
+	/* flex dispaly allow width and height to be adjustable automatically */
+	/* autoamtically sizes child elements within the child */
+	display: flex;
+	flex-direction: column;
+	/* flex-grow does a propotion cal */
+	flex-grow: 2;
+}
+
+.left .right {
+	flex-grow: 1;
+}
+
+body {
+	display: flex;
+}

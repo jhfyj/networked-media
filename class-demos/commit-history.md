@@ -11,7 +11,7 @@ way we open terminal:
 ways in which we ran our sevrer.js file
 
 1. node server.js --> this requires a restart every time we make changes to the file
-2. note --watch server.js --> this watches our 'server.js' file for changes and will automatically restart the server
+2. node --watch server.js --> this watches our 'server.js' file for changes and will automatically restart the server
 3. 'node --watch --watch-path=views server.js --> this watches both our sever.js file and all of our .njk fies in our views
 
 for when you have env files -->
