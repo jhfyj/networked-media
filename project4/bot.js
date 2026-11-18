@@ -14,30 +14,37 @@ async function makeStatus(text) {
 	const status = await masto.v1.statuses.create({
 		status: text,
 		// change visability to public when project ready to run
-		visibility: 'private'
+		visibility: 'public'
 	});
 }
 
-setInterval(async () => {
-	// TODO ADD API REQUEST
+let classmates = ['@annafeng'];
 
-	let url = 'http://68.183.19.37:6001/get-data';
+let emoji = ['👀', '🥤', '🧋', '🍵'];
+
+setInterval(async () => {
+	let hour = new Date().getHours();
+	if (hour >= 1 && hour < 9) {
+		console.log('bot is sleeping zzz');
+		return;
+	}
+
+	let url = 'http://159.223.135.171:5006/api/drinks';
 	let response = await fetch(url);
 	let json = await response.json();
 
-	// what do you want to do with your partner's data?
+	let randDrink = Math.floor(Math.random() * json.drinks.length);
+	let drink = json.drinks[randDrink];
 
-	let emoji = ['😭', '🤩', '💖'];
+	let randPerson = Math.floor(Math.random() * classmates.length);
+	let person = classmates[randPerson];
 
-	// randomly generate a number within the array list
-	let rand = Math.floor(Math.random() * emoji.length);
+	let randEmoji = Math.floor(Math.random() * emoji.length);
 
-	// select an emoji from the array using a random index
-	let post = json[0] + emoji[rand];
-	//DOUBLE CHECK ON THIS not sure how to make post yet
+	let post = person + ' you should try a ' + drink.drink + ' ' + drink.emoji + emoji[randEmoji];
 
 	console.log(post);
 
 	// make our status
 	makeStatus(post);
-}, 10000);
+}, 900000);
