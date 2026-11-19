@@ -24,7 +24,7 @@ let emoji = ['👀', '🥤', '🧋', '🍵'];
 
 setInterval(async () => {
 	let hour = new Date().getHours();
-	if (hour >= 1 && hour < 9) {
+	if (hour >= 6 && hour < 14) {
 		console.log('bot is sleeping zzz');
 		return;
 	}
