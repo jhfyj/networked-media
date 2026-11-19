@@ -18,7 +18,7 @@ async function makeStatus(text) {
 	});
 }
 
-let classmates = ['@annafeng', '@jhfyj'];
+let classmates = ['@annafeng', '@lamq', '@kikiye', '@a3yan', '@ali'];
 
 let emoji = ['👀', '🥤', '🧋', '🍵'];
 
@@ -29,22 +29,27 @@ setInterval(async () => {
 		return;
 	}
 
-	let url = 'http://159.223.135.171:5006/api/drinks';
-	let response = await fetch(url);
-	let json = await response.json();
+	// try/catch so one bad round doesn't crash the whole bot
+	try {
+		let url = 'http://159.223.135.171:5006/api/drinks';
+		let response = await fetch(url);
+		let json = await response.json();
 
-	let randDrink = Math.floor(Math.random() * json.drinks.length);
-	let drink = json.drinks[randDrink];
+		let randDrink = Math.floor(Math.random() * json.drinks.length);
+		let drink = json.drinks[randDrink];
 
-	let randPerson = Math.floor(Math.random() * classmates.length);
-	let person = classmates[randPerson];
+		let randPerson = Math.floor(Math.random() * classmates.length);
+		let person = classmates[randPerson];
 
-	let randEmoji = Math.floor(Math.random() * emoji.length);
+		let randEmoji = Math.floor(Math.random() * emoji.length);
 
-	let post = person + ' you should try a ' + drink.drink + ' ' + drink.emoji + emoji[randEmoji];
+		let post = person + ' you should try a ' + drink.drink + ' ' + drink.emoji + emoji[randEmoji];
 
-	console.log(post);
+		console.log(post);
 
-	// make our status
-	makeStatus(post);
+		// make our status
+		await makeStatus(post);
+	} catch (err) {
+		console.log('something went wrong, trying again next round: ' + err.message);
+	}
 }, 900000);
