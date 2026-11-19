@@ -18,7 +18,7 @@ async function makeStatus(text) {
 	});
 }
 
-let classmates = ['@annafeng'];
+let classmates = ['@annafeng', '@jhfyj'];
 
 let emoji = ['👀', '🥤', '🧋', '🍵'];
 
